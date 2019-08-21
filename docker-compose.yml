@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: snet
+      POSTGRES_USER: snet
+      POSTGRES_PASSWORD: snet
+    volumes:
+      - snet-datavolume:/var/lib/postgresql/data
+
+  snet:
+    image: trusch/snet:latest
+    command:
+      - snet
+      - serve
+      - --addr=3001
+      - --feed-key=/keys/feed
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    volumes:
+      ./keys:/keys
+    
+volumes:
+  snet-datavolume: {}

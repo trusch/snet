@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option go_package = "snet";
+
+import "google/protobuf/timestamp.proto";
+
+message Message {
+    string feed = 1;
+    string id = 2;
+    string previous = 3;
+    int64 sequence = 4;
+    string type = 6;
+    bytes content = 7;
+    string signature = 8;
+    google.protobuf.Timestamp created_at = 9;
+}
+
+message CreateRequest {
+    string feed = 1;
+    string type = 2;
+    bytes content = 3;
+}
+
+message GetRequest {
+    string id = 1;
+};
+
+message ListRequest {
+    string feed = 1;
+    string type = 2;
+    int64 start_sequence = 3;
+    int64 end_sequence = 4;
+    google.protobuf.Timestamp start_timestamp = 5;
+    google.protobuf.Timestamp end_timestamp = 6;
+    bool stream = 7;
+};
+
+service Core {
+    rpc Get(GetRequest) returns (Message);
+    rpc Create(CreateRequest) returns (Message);
+    rpc List(ListRequest) returns (stream Message);
+}

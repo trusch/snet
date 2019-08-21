@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option go_package = "snet";
+
+import "google/protobuf/timestamp.proto";
+
+message Peer {
+    string id = 1;
+    string name = 2;
+    string address = 3;
+    repeated string feeds = 4;
+    google.protobuf.Timestamp created_at = 5;
+    google.protobuf.Timestamp updated_at = 6;
+    bool useTLS = 7;
+}
+
+message CreatePeerRequest {
+    string id = 1;
+    string name = 2;
+    string address = 3;
+    repeated string feeds = 4;
+}
+
+message UpdatePeerRequest {
+    string id = 1;
+    string name = 2;
+    string address = 3;
+    repeated string feeds = 4;
+}
+
+message GetPeerRequest {
+    string id = 1;
+    string name = 2;
+};
+
+message ListPeerRequest {};
+
+service Peers {
+    rpc Create(CreatePeerRequest) returns (Peer);
+    rpc Get(GetPeerRequest) returns (Peer);
+    rpc Update(UpdatePeerRequest) returns (Peer);
+    rpc Delete(GetPeerRequest) returns (Peer);
+    rpc List(ListPeerRequest) returns (stream Peer);
+}
